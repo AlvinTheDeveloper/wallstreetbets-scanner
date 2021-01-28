@@ -17,8 +17,27 @@ async function run() {
     console.log('Running API calls')
     let reg= new RegExp(/\$\b[^\d\W]+\b/g)
     for(let i=0;i<MAX_API_CALL;i++){
-        console.log(`Fetching page ${i+1} data`)
-        let res = await axios.get(url.toString())
+        let retry=0
+        let callAPI=async ()=>{
+            try{
+                console.log(`Fetching page ${i+1} data`)
+                return await axios.get(url.toString())
+            }catch (e){
+                if(retry<3){
+                    retry+=1
+                    console.error(e)
+                    console.log("Retry after 3 seconds")
+                    return await new Promise(resolve => {
+                        setTimeout(async()=>{
+                            resolve(await callAPI())
+                        },3000)
+                    })
+                }else{
+                    throw e
+                }
+            }
+        }
+        let res = await callAPI()
         childrenArr=childrenArr.concat(res.data.data.children)
         let symbolArr=[]
         for(let c of res.data.data.children){

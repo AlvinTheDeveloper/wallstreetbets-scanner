@@ -1,10 +1,18 @@
 # reddit-scanner
 
 ## Installation
+### Download source
 ```
 git clone https://github.com/AlvinTheDeveloper/reddit-scanner.git
 cd reddit-scanner
-npm i # or yarn
+```
+### Install dependencies with npm
+```
+npm i
+```
+### Or with yarn
+```
+yarn
 ```
 
 ## Usage
