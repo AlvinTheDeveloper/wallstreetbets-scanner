@@ -1,18 +1,18 @@
 # reddit-scanner
 
-##Installation
+## Installation
 ```
 git clone https://github.com/AlvinTheDeveloper/reddit-scanner.git
 cd reddit-scanner
 npm i # or yarn
 ```
 
-##Usage
+## Usage
 ```
 node index.js
 ```
 
-##Sample output
+## Sample output
 ```json
 {
     "GME": {
