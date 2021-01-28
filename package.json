@@ -1,0 +1,10 @@
+{
+  "name": "reddit-scanner",
+  "description": "This script collects statistical data from Reddit (r/wallstreetbets). It tells us how many times does a symbol (e.g. TSLA) occurs in x API calls, and how many times do different types of flairs were tagged to the posts.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
