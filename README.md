@@ -1,23 +1,24 @@
 # wallstreetbets-scanner
 
 ## Installation
-### Download source
-```
-git clone https://github.com/AlvinTheDeveloper/reddit-scanner.git
-cd reddit-scanner
-```
 ### Install dependencies with npm
 ```
-npm i
+npm i wallstreetbets-scanner --save
 ```
 ### Or with yarn
 ```
-yarn
+yarn add wallstreetbets-scanner --save
 ```
 
 ## Usage
 ```
-node index.js
+const wsbScanner=require('wallstreetbets-scanner')
+
+wsbScanner()
+    .then(data=>{
+        console.log(data)
+    })
+
 ```
 
 ## Sample output
