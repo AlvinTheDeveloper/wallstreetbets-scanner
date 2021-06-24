@@ -1,4 +1,4 @@
-const fs = require("fs")
+
 const axios = require('axios');
 const URL = require('url').URL;
 
@@ -11,7 +11,7 @@ const MAX_API_CALL=100
 let childrenArr=[]
 let symbolsObj={}
 
-async function run() {
+module.exports = async ()=>{
     // The code below finds string in $SYMBOL(e.g. $GME) pattern. It is because Reddit users usually use $ following by the symbol code to represent a symbol.
     // Also, it store the JSON object to a variable to save time from making API calls again.
     console.log('Running API calls')
@@ -53,6 +53,7 @@ async function run() {
             if(!symbolsObj[sa]){
                 symbolsObj[sa.replace("$","").toUpperCase()]={
                     occurrence_count:0,
+                    total_post_score:0,
                     flair:{}
                 }
             }
@@ -74,6 +75,7 @@ async function run() {
 
             if(c.data.selftext.match(reg2)||c.data.title.match(reg2)){ //If no string matches the regex pattern, the .match() will return null.
                 symbolsObj[s].occurrence_count+=1
+                symbolsObj[s].total_post_score += childrenArr["0"].data.score
                 for(let flair of c.data.link_flair_richtext){
                     if(flair.e==="text"){
                         if(!symbolsObj[s].flair[flair.t]){
@@ -86,9 +88,6 @@ async function run() {
             }
         }
     }
-    console.log(JSON.stringify(symbolsObj,null,2))
-
-    fs.writeFileSync('output.json',JSON.stringify(symbolsObj,null,2))
+    // console.log(JSON.stringify(symbolsObj,null,2))
+    return symbolsObj
 }
-
-run()

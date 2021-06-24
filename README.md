@@ -1,4 +1,4 @@
-# reddit-scanner
+# wallstreetbets-scanner
 
 ## Installation
 ### Download source
