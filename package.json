@@ -3,7 +3,7 @@
   "description": "This script collects statistical data from Reddit (r/wallstreetbets). It tells us how many times do symbols (e.g. TSLA) occurs in x times of API calls, and how many times do different types of flairs were tagged to the posts.",
   "version": "1.1.0",
   "main": "index.js",
-  "scripts":{
+  "scripts": {
     "start": "node demo/index.js"
   },
   "license": "MIT",
@@ -11,8 +11,16 @@
     "url": "https://github.com/AlvinTheDeveloper/wallstreetbets-scanner/issues"
   },
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "csv-parse": "^4.16.0"
   },
   "author": "Alvin Lau",
-  "homepage": "https://github.com/AlvinTheDeveloper/wallstreetbets-scanner#readme"
+  "homepage": "https://github.com/AlvinTheDeveloper/wallstreetbets-scanner#readme",
+  "keywords": [
+    "wallstreetbets",
+    "wsb"
+  ],
+  "devDependencies": {
+    "jest": "^27.0.5"
+  }
 }

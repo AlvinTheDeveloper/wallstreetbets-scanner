@@ -1,17 +1,28 @@
 
 const axios = require('axios');
 const URL = require('url').URL;
-
+let dataLoader = require('./utils/data-loader')
 const redditUrl = 'https://www.reddit.com/r/wallstreetbets/hot.json'
 
 let url = new URL(redditUrl);
-console.log(url.toString())
 
 const MAX_API_CALL=100
 let childrenArr=[]
 let symbolsObj={}
 
-module.exports = async ()=>{
+const defaultOptions={
+    maxApiCall:MAX_API_CALL,
+    retryOnError:true,
+    retryTimes:3,
+    retryAfter:3, //A non-negative decimal integer indicating the seconds to wait on error occurs
+}
+
+let symbolObj
+
+module.exports = async (options={})=>{
+    if(!symbolObj){
+        symbolObj=dataLoader.loadSymbolObject()
+    }
     // The code below finds string in $SYMBOL(e.g. $GME) pattern. It is because Reddit users usually use $ following by the symbol code to represent a symbol.
     // Also, it store the JSON object to a variable to save time from making API calls again.
     console.log('Running API calls')
@@ -39,7 +50,9 @@ module.exports = async ()=>{
         }
         let res = await callAPI()
         childrenArr=childrenArr.concat(res.data.data.children)
-        let symbolArr=[]
+
+
+        /*let symbolArr=[]
         for(let c of res.data.data.children){
             let symbolsFoundArr=c.data.selftext.match(reg)
             symbolsFoundArr=symbolsFoundArr?symbolsFoundArr:[]
@@ -57,7 +70,7 @@ module.exports = async ()=>{
                     flair:{}
                 }
             }
-        }
+        }*/
 
         if(res.data.data.after||res.data.data.after!==""){
             url.searchParams.set('after', res.data.data.after);
@@ -71,9 +84,7 @@ module.exports = async ()=>{
     console.log("Counting data")
     for(let c of childrenArr){
         for(let s in symbolsObj){
-            let reg2= new RegExp(`\\$*\\b[${s}|${s.toLowerCase()}]\\b`,'g')
-
-            if(c.data.selftext.match(reg2)||c.data.title.match(reg2)){ //If no string matches the regex pattern, the .match() will return null.
+            if(c.data.selftext.includes(s)||c.data.title.includes(s)){
                 symbolsObj[s].occurrence_count+=1
                 symbolsObj[s].total_post_score += childrenArr["0"].data.score
                 for(let flair of c.data.link_flair_richtext){
