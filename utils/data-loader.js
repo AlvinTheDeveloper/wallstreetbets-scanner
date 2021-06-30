@@ -2,7 +2,6 @@ const fs = require('fs')
 const parse = require('csv-parse/lib/sync')
 
 function loadSymbolObject(){
-    console.log("loadSymbolObject")
     let symbolObj={}
     let nasdaqRawData = fs.readFileSync('data/symbols/nasdaq.txt')
     let otherListedRawData = fs.readFileSync('data/symbols/otherlisted.txt') // NYSE and other exchanges

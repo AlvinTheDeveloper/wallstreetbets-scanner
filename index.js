@@ -26,7 +26,7 @@ module.exports = async (options={})=>{
     // The code below finds string in $SYMBOL(e.g. $GME) pattern. It is because Reddit users usually use $ following by the symbol code to represent a symbol.
     // Also, it store the JSON object to a variable to save time from making API calls again.
     console.log('Running API calls')
-    let reg= new RegExp(/\$\b[^\d\W]+\b/g)
+
     for(let i=0;i<MAX_API_CALL;i++){
         let retry=0
         let callAPI=async ()=>{
@@ -51,27 +51,6 @@ module.exports = async (options={})=>{
         let res = await callAPI()
         childrenArr=childrenArr.concat(res.data.data.children)
 
-
-        /*let symbolArr=[]
-        for(let c of res.data.data.children){
-            let symbolsFoundArr=c.data.selftext.match(reg)
-            symbolsFoundArr=symbolsFoundArr?symbolsFoundArr:[]
-            symbolArr=symbolArr.concat(symbolsFoundArr)
-            symbolsFoundArr=c.data.title.match(reg)
-            symbolsFoundArr=symbolsFoundArr?symbolsFoundArr:[]
-            symbolArr=symbolArr.concat(symbolsFoundArr)
-        }
-
-        for(let sa of symbolArr){
-            if(!symbolsObj[sa]){
-                symbolsObj[sa.replace("$","").toUpperCase()]={
-                    occurrence_count:0,
-                    total_post_score:0,
-                    flair:{}
-                }
-            }
-        }*/
-
         if(res.data.data.after||res.data.data.after!==""){
             url.searchParams.set('after', res.data.data.after);
         }else{
@@ -84,7 +63,8 @@ module.exports = async (options={})=>{
     console.log("Counting data")
     for(let c of childrenArr){
         for(let s in symbolsObj){
-            if(c.data.selftext.includes(s)||c.data.title.includes(s)){
+            let reg= new RegExp(`\\b\\$*${s}\\b`,'gmi')
+            if(c.data.selftext.toUpperCase().match(reg)||c.data.title.toUpperCase().match(reg)){//If no string matches the regex pattern, the .match() will return null.
                 symbolsObj[s].occurrence_count+=1
                 symbolsObj[s].total_post_score += childrenArr["0"].data.score
                 for(let flair of c.data.link_flair_richtext){
@@ -99,6 +79,5 @@ module.exports = async (options={})=>{
             }
         }
     }
-    // console.log(JSON.stringify(symbolsObj,null,2))
     return symbolsObj
 }
