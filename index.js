@@ -6,42 +6,56 @@ const redditUrl = 'https://www.reddit.com/r/wallstreetbets/hot.json'
 
 let url = new URL(redditUrl);
 
-const MAX_API_CALL=100
 let childrenArr=[]
 let symbolsObj={}
 
 const defaultOptions={
-    maxApiCall:MAX_API_CALL,
+    pages:100,
     retryOnError:true,
     retryTimes:3,
     retryAfter:3, //A non-negative decimal integer indicating the seconds to wait on error occurs
+    hideIfNotMentioned:true
 }
 
-let symbolObj
+/**
+ * Assign default option value to options if property do not exist
+ * @param options
+ * @returns {*}
+ */
+function setDefaultOptions(options){
+    for(let key in defaultOptions){
+        if(options[key]===null||options[key]===undefined){
+            options[key]=defaultOptions[key]
+        }
+    }
+    return options
+}
 
 module.exports = async (options={})=>{
-    if(!symbolObj){
-        symbolObj=dataLoader.loadSymbolObject()
+    options=setDefaultOptions(options)
+    console.log(options)
+    if(Object.keys(symbolsObj).length === 0){
+        symbolsObj=dataLoader.loadSymbolObject()
     }
     // The code below finds string in $SYMBOL(e.g. $GME) pattern. It is because Reddit users usually use $ following by the symbol code to represent a symbol.
     // Also, it store the JSON object to a variable to save time from making API calls again.
     console.log('Running API calls')
 
-    for(let i=0;i<MAX_API_CALL;i++){
+    for(let i=0;i<options.pages;i++){
         let retry=0
         let callAPI=async ()=>{
             try{
                 console.log(`Fetching page ${i+1} data`)
                 return await axios.get(url.toString())
             }catch (e){
-                if(retry<3){
+                if(options.retryOnError&&retry<options.retryTimes){
                     retry+=1
                     console.error(e)
                     console.log("Retry after 3 seconds")
                     return await new Promise(resolve => {
                         setTimeout(async()=>{
                             resolve(await callAPI())
-                        },3000)
+                        },options.retryAfter)
                     })
                 }else{
                     throw e
@@ -76,6 +90,14 @@ module.exports = async (options={})=>{
                         }
                     }
                 }
+            }
+        }
+    }
+
+    if(options.hideIfNotMentioned){
+        for(let s in symbolsObj){
+            if(symbolsObj[s].occurrence_count<=0){
+                delete symbolsObj[s]
             }
         }
     }
