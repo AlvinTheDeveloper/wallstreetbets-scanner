@@ -1,7 +1,7 @@
 {
   "name": "wallstreetbets-scanner",
   "description": "The wallstreetbets-scanner collects statistical data from Reddit (r/wallstreetbets). It tells us how many times do symbols (e.g. TSLA) occurs in x times of API calls, and how many times do different types of flairs were tagged to the posts.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "index.js",
   "scripts": {
     "start": "node demo/index.js"

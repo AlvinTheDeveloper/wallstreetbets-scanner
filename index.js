@@ -37,8 +37,7 @@ module.exports = async (options={})=>{
     if(Object.keys(symbolsObj).length === 0){
         symbolsObj=dataLoader.loadSymbolObject()
     }
-    // The code below finds string in $SYMBOL(e.g. $GME) pattern. It is because Reddit users usually use $ following by the symbol code to represent a symbol.
-    // Also, it store the JSON object to a variable to save time from making API calls again.
+
     console.log('Running API calls')
 
     for(let i=0;i<options.pages;i++){

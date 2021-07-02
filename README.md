@@ -19,7 +19,7 @@ wsbScanner({
     pages:10,
     retryOnError:true,
     retryTimes:3,
-    retryAfter:3, //A non-negative decimal integer indicating the seconds to wait on error occurs
+    retryAfter:3,
     hideIfNotMentioned:true
 })
     .then(data=>{
