@@ -33,6 +33,19 @@ function loadSymbolObject(){
     return symbolObj
 }
 
+function symbolArrayToObject(symbolArray){
+    let symbolObj={}
+    for(let sa of symbolArray){
+        symbolObj[sa]={
+            occurrence_count:0,
+            total_post_score:0,
+            flair:{}
+        }
+    }
+    return symbolObj
+}
+
 module.exports={
-    loadSymbolObject
+    loadSymbolObject,
+    symbolArrayToObject
 }

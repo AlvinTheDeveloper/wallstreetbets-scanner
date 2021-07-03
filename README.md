@@ -20,10 +20,12 @@ wsbScanner({
     retryOnError:true,
     retryTimes:3,
     retryAfter:3,
-    hideIfNotMentioned:true
+    hideIfNotMentioned:true,
+    sortMethod:"new",
+    symbols:["XPEV"]
 })
     .then(data=>{
-        console.log(data)
+        fs.writeFileSync('output.json',JSON.stringify(data,null,2))
     })
 
 ```
@@ -59,5 +61,7 @@ wsbScanner({
 | retryTimes         | number  | Maximum attempt to re-run the API call on error occurs.                                                                                 | 3             |
 | retryAfter         | number  | Number of seconds to wait for re-run the API call after error occurs.                                                                   | 3             |
 | hideIfNotMentioned | boolean | Hide the result of a stock if occurrence_count=0.                                                                                       | true          |
+| sortMethod         | string  | Reddit sorting method you want to use.                                                                                                  | hot           |
+| symbols            | array   | An array of symbol string you want to filter.                                                                                           | []            |
 
 

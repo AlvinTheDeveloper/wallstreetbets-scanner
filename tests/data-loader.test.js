@@ -24,3 +24,12 @@ test('test loadSymbolData()', () => {
         flair:{}
     }))
 });
+
+test("test symbolArrayToObject()",()=>{
+    let symbolObj=dataLoader.symbolArrayToObject(["AAPL","ESTC","ZM"]);
+    expect('AAPL' in symbolObj).toBe(true);
+    expect('ESTC' in symbolObj).toBe(true);
+    expect('ZM' in symbolObj).toBe(true);
+    symbolObj=dataLoader.symbolArrayToObject([]);
+    expect(Object.keys(symbolObj).length).toBe(0)
+})

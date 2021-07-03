@@ -2,9 +2,8 @@
 const axios = require('axios');
 const URL = require('url').URL;
 let dataLoader = require('./utils/data-loader')
-const redditUrl = 'https://www.reddit.com/r/wallstreetbets/hot.json'
 
-let url = new URL(redditUrl);
+
 
 let childrenArr=[]
 let symbolsObj={}
@@ -13,8 +12,10 @@ const defaultOptions={
     pages:100,
     retryOnError:true,
     retryTimes:3,
-    retryAfter:3, //A non-negative decimal integer indicating the seconds to wait on error occurs
-    hideIfNotMentioned:true
+    retryAfter:3,
+    hideIfNotMentioned:true,
+    sortMethod:"hot",
+    symbols:[]
 }
 
 /**
@@ -33,9 +34,14 @@ function setDefaultOptions(options){
 
 module.exports = async (options={})=>{
     options=setDefaultOptions(options)
-    console.log(options)
+    let url = new URL(`https://www.reddit.com/r/wallstreetbets/${options.sortMethod}.json`);
+
     if(Object.keys(symbolsObj).length === 0){
-        symbolsObj=dataLoader.loadSymbolObject()
+        if(options.symbols.length>0){
+            symbolsObj=dataLoader.symbolArrayToObject(options.symbols)
+        }else{
+            symbolsObj=dataLoader.loadSymbolObject()
+        }
     }
 
     console.log('Running API calls')
