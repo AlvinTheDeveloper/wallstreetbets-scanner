@@ -1,8 +1,9 @@
 
+const path = require('path');
 const axios = require('axios');
 const URL = require('url').URL;
 let dataLoader = require('./utils/data-loader')
-
+global.appRoot = path.resolve(__dirname);
 
 
 let childrenArr=[]

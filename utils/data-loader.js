@@ -3,8 +3,8 @@ const parse = require('csv-parse/lib/sync')
 
 function loadSymbolObject(){
     let symbolObj={}
-    let nasdaqRawData = fs.readFileSync('data/symbols/nasdaq.txt')
-    let otherListedRawData = fs.readFileSync('data/symbols/otherlisted.txt') // NYSE and other exchanges
+    let nasdaqRawData = fs.readFileSync(appRoot + '/data/symbols/nasdaq.txt')
+    let otherListedRawData = fs.readFileSync(appRoot+'/data/symbols/otherlisted.txt')// NYSE and other exchanges
     const nasdaqData = parse(nasdaqRawData, {
         delimiter: "|",
         trim: true

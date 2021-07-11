@@ -1,5 +1,6 @@
 let dataLoader = require('../utils/data-loader')
-
+const path = require('path')
+global.appRoot = path.resolve('./')
 test('test loadSymbolData()', () => {
     let symbolObj=dataLoader.loadSymbolObject();
     expect('AAL' in symbolObj).toBe(true);
